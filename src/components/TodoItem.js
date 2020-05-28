@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 class TodoItem extends React.Component {
   getStyle = () => {
@@ -18,6 +19,10 @@ class TodoItem extends React.Component {
     this.props.markTodo(this.props.todo.id);
   };
 
+  editTodo = () => {
+    this.props.editTodo(this.props.todo.id);
+  };
+
   deleteTodo = () => {
     this.props.deleteTodo(this.props.todo.id);
   };
@@ -31,7 +36,9 @@ class TodoItem extends React.Component {
             onClick={this.markTodo}
             className="btnStyle fas fa-check-circle"
           ></i>
-          <i className="btnStyle fas fa-edit"></i>
+          <Link style={{ color: "black" }} to="/edit">
+            <i onClick={this.editTodo} className="btnStyle fas fa-edit"></i>
+          </Link>
           <i onClick={this.deleteTodo} className="btnStyle fas fa-trash"></i>
         </div>
       </div>

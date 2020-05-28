@@ -5,13 +5,17 @@ export class EditTodo extends Component {
     title: "",
   };
 
+  onChange = () => {
+    console.log("on change from edittodo.sjs");
+  };
+
   render() {
     return (
       <form style={formStyle} onSubmit={this.onSubmit}>
         <input
           style={inputStyle}
           type="text"
-          placeholder="Adicionar nova tarefa"
+          placeholder={this.props.todo.title}
           onChange={this.onChange}
           value={this.state.title}
         />

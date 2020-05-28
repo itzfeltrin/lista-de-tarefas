@@ -1,8 +1,12 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 import TodoList from "./components/TodoList";
 import Header from "./components/Header";
 import AddTodo from "./components/AddTodo";
-import { v4 as uuidv4 } from "uuid";
+import Login from "./components/Login";
+import EditTodo from "./components/EditTodo";
+import ClearList from "./components/ClearList";
 
 export class App extends Component {
   state = {
@@ -34,19 +38,45 @@ export class App extends Component {
     this.setState({ todoList: [...this.state.todoList, newTodo] });
   };
 
+  clearList = () => {
+    this.setState({
+      todoList: [],
+    });
+  };
+
   render() {
     return (
-      <div>
-        <Header />
-        <main style={containerStyle}>
-          <AddTodo addTodo={this.addTodo} />
-          <TodoList
-            markTodo={this.markTodo}
-            deleteTodo={this.deleteTodo}
-            todoList={this.state.todoList}
-          />
-        </main>
-      </div>
+      <Router>
+        <div>
+          <Header />
+          <main style={containerStyle}>
+            <Route exact path="/" component={Login} />
+            <Route
+              path="/edit"
+              render={(props) => (
+                <React.Fragment>
+                  <EditTodo todo={this.state.todoList[0]} />
+                </React.Fragment>
+              )}
+            />
+            <Route
+              path="/home"
+              render={(props) => (
+                <React.Fragment>
+                  <AddTodo addTodo={this.addTodo} />
+                  <TodoList
+                    markTodo={this.markTodo}
+                    editTodo={this.editTodo}
+                    deleteTodo={this.deleteTodo}
+                    todoList={this.state.todoList}
+                  />
+                  <ClearList clearList={this.clearList} />
+                </React.Fragment>
+              )}
+            />
+          </main>
+        </div>
+      </Router>
     );
   }
 }

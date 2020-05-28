@@ -6,6 +6,10 @@ class TodoList extends React.Component {
     this.props.markTodo(id);
   };
 
+  editTodo = (id) => {
+    this.props.editTodo(id);
+  };
+
   deleteTodo = (id) => {
     this.props.deleteTodo(id);
   };
@@ -14,6 +18,7 @@ class TodoList extends React.Component {
     return this.props.todoList.map((todo) => (
       <TodoItem
         markTodo={this.markTodo}
+        editTodo={this.editTodo}
         deleteTodo={this.deleteTodo}
         key={todo.id}
         todo={todo}
