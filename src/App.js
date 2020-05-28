@@ -1,43 +1,65 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import TodoList from "./components/TodoList";
 import Header from "./components/Header";
 import AddTodo from "./components/AddTodo";
-import Login from "./components/Login";
-import EditTodo from "./components/EditTodo";
 import ClearList from "./components/ClearList";
 
 export class App extends Component {
   state = {
     todoList: [],
+    title: "",
+    idToEdit: 0,
+    editItem: false,
   };
 
+  onChange = (e) => {
+    this.setState({ title: e.target.value });
+  };
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    console.log(this.state.idToEdit);
+    if (this.state.title.length > 0) {
+      const newTodo = {
+        title: this.state.title,
+        completed: false,
+        id: this.state.idToEdit != "0" ? this.state.idToEdit : uuidv4(),
+      };
+      this.setState({
+        todoList: [...this.state.todoList, newTodo],
+        title: "",
+      });
+    }
+  };
+  /* marca tarefa como finalizada */
   markTodo = (id) => {
-    this.setState({
-      todos: this.state.todoList.map((todo) => {
-        if (todo.id === id) {
-          todo.completed = !todo.completed;
-        }
-      }),
+    const newList = this.state.todoList;
+    newList.map((todo) => {
+      if (todo.id === id) {
+        todo.completed = !todo.completed;
+      }
     });
+    this.setState({ todoList: newList });
   };
-
+  /* deleta tarefa */
   deleteTodo = (id) => {
     this.setState({
       todoList: [...this.state.todoList.filter((todo) => todo.id !== id)],
     });
   };
-
-  addTodo = (title) => {
-    const newTodo = {
-      title,
-      completed: false,
-      id: uuidv4(),
-    };
-    this.setState({ todoList: [...this.state.todoList, newTodo] });
+  /* editar tarefa */
+  editTodo = (id) => {
+    this.deleteTodo(id);
+    const todoToEdit = this.state.todoList.find((todo) => todo.id === id);
+    this.setState({
+      title: todoToEdit.title,
+      idToEdit: todoToEdit.id,
+      editItem: true,
+    });
   };
 
+  /* limpa lista */
   clearList = () => {
     this.setState({
       todoList: [],
@@ -46,37 +68,25 @@ export class App extends Component {
 
   render() {
     return (
-      <Router>
-        <div>
-          <Header />
-          <main style={containerStyle}>
-            <Route exact path="/" component={Login} />
-            <Route
-              path="/edit"
-              render={(props) => (
-                <React.Fragment>
-                  <EditTodo todo={this.state.todoList[0]} />
-                </React.Fragment>
-              )}
-            />
-            <Route
-              path="/home"
-              render={(props) => (
-                <React.Fragment>
-                  <AddTodo addTodo={this.addTodo} />
-                  <TodoList
-                    markTodo={this.markTodo}
-                    editTodo={this.editTodo}
-                    deleteTodo={this.deleteTodo}
-                    todoList={this.state.todoList}
-                  />
-                  <ClearList clearList={this.clearList} />
-                </React.Fragment>
-              )}
-            />
-          </main>
-        </div>
-      </Router>
+      <div>
+        <Header />
+        <main style={containerStyle}>
+          <AddTodo
+            title={this.state.title}
+            onChange={this.onChange}
+            onSubmit={this.onSubmit}
+            editItem={this.state.editItem}
+            idToEdit={this.state.idToEdit}
+          />
+          <TodoList
+            markTodo={this.markTodo}
+            editTodo={this.editTodo}
+            deleteTodo={this.deleteTodo}
+            todoList={this.state.todoList}
+          />
+          <ClearList clearList={this.clearList} />
+        </main>
+      </div>
     );
   }
 }

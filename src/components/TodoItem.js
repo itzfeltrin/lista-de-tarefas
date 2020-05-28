@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 class TodoItem extends React.Component {
   getStyle = () => {
@@ -15,31 +14,24 @@ class TodoItem extends React.Component {
     };
   };
 
-  markTodo = () => {
-    this.props.markTodo(this.props.todo.id);
-  };
-
-  editTodo = () => {
-    this.props.editTodo(this.props.todo.id);
-  };
-
-  deleteTodo = () => {
-    this.props.deleteTodo(this.props.todo.id);
-  };
-
   render() {
+    const { markTodo, editTodo, deleteTodo, todo } = this.props;
     return (
       <div style={this.getStyle()}>
-        <h3>{this.props.todo.title}</h3>
-        <div>
+        <h3>{todo.title}</h3>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <i
-            onClick={this.markTodo}
+            onClick={markTodo.bind(null, todo.id)}
             className="btnStyle fas fa-check-circle"
           ></i>
-          <Link style={{ color: "black" }} to="/edit">
-            <i onClick={this.editTodo} className="btnStyle fas fa-edit"></i>
-          </Link>
-          <i onClick={this.deleteTodo} className="btnStyle fas fa-trash"></i>
+          <i
+            onClick={editTodo.bind(null, todo.id)}
+            className="btnStyle fas fa-edit"
+          ></i>
+          <i
+            onClick={deleteTodo.bind(null, todo.id)}
+            className="btnStyle fas fa-trash"
+          ></i>
         </div>
       </div>
     );

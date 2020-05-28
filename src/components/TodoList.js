@@ -2,24 +2,13 @@ import React from "react";
 import TodoItem from "./TodoItem";
 
 class TodoList extends React.Component {
-  markTodo = (id) => {
-    this.props.markTodo(id);
-  };
-
-  editTodo = (id) => {
-    this.props.editTodo(id);
-  };
-
-  deleteTodo = (id) => {
-    this.props.deleteTodo(id);
-  };
-
   render() {
-    return this.props.todoList.map((todo) => (
+    const { markTodo, editTodo, deleteTodo, todoList } = this.props;
+    return todoList.map((todo) => (
       <TodoItem
-        markTodo={this.markTodo}
-        editTodo={this.editTodo}
-        deleteTodo={this.deleteTodo}
+        markTodo={markTodo}
+        editTodo={editTodo}
+        deleteTodo={deleteTodo}
         key={todo.id}
         todo={todo}
       />

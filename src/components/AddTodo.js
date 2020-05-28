@@ -1,33 +1,21 @@
 import React, { Component } from "react";
+import "../App.css";
 
 export class AddTodo extends Component {
-  state = {
-    title: "",
-  };
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    if (this.state.title.length > 0) {
-      this.props.addTodo(this.state.title);
-      this.setState({ title: "" });
-    }
-  };
-
-  onChange = (e) => {
-    this.setState({ title: e.target.value });
-  };
-
   render() {
+    const { title, onChange, onSubmit, editItem, idToEdit } = this.props;
     return (
-      <form style={formStyle} onSubmit={this.onSubmit}>
+      <form style={formStyle} onSubmit={onSubmit}>
         <input
           style={inputStyle}
           type="text"
           placeholder="Adicionar nova tarefa"
-          onChange={this.onChange}
-          value={this.state.title}
+          onChange={onChange}
+          value={title}
         />
-        <input style={submitStyle} type="submit" value="+" />
+        <button className="submitStyle" type="submit">
+          <i className={editItem ? "fas fa-check" : "fas fa-plus-square"}></i>
+        </button>
       </form>
     );
   }
@@ -36,6 +24,7 @@ export class AddTodo extends Component {
 const formStyle = {
   display: "flex",
   boxShadow: "2px 5px 10px black",
+  marginBottom: "1rem",
 };
 
 const inputStyle = {
@@ -43,16 +32,6 @@ const inputStyle = {
   fontSize: "1.25rem",
   padding: ".75rem 1rem",
   border: "none",
-};
-
-const submitStyle = {
-  width: "50px",
-  cursor: "pointer",
-  fontSize: "1.75rem",
-  padding: ".35rem",
-  border: "none",
-  background: "black",
-  color: "#f4f4f4",
 };
 
 export default AddTodo;

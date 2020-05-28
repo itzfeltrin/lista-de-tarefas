@@ -1,28 +1,15 @@
 import React, { Component } from "react";
+import "../App.css";
 
 export class ClearList extends Component {
-  clearList = () => {
-    this.props.clearList();
-  };
-
   render() {
+    const { clearList } = this.props;
     return (
-      <div style={clearStyle} onClick={this.clearList}>
+      <div className="clearStyle" onClick={clearList}>
         <h1>Excluir todas as tarefas</h1>
       </div>
     );
   }
 }
-
-const clearStyle = {
-  fontSize: ".5rem",
-  textAlign: "center",
-  background: "#ff3333",
-  padding: "1rem 0",
-  color: "white",
-  letterSpacing: "3px",
-  marginTop: "1rem",
-  cursor: "pointer",
-};
 
 export default ClearList;
