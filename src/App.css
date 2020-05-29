@@ -41,3 +41,34 @@
   background: #ff3333;
   color: white;
 }
+
+.todo-list {
+  overflow-y: scroll;
+  max-height: 70vh;
+}
+
+.todo-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.todo-list::-webkit-scrollbar-track {
+  background: #f4f4f4;
+}
+
+.todo-list::-webkit-scrollbar-thumb {
+  height: 5px;
+  background: #555;
+}
+
+.todo-list::-webkit-scrollbar-thumb:hover {
+  background: #000;
+}
+
+.link-style {
+  cursor: pointer;
+  display: inline;
+}
+
+.active.link-style {
+  border-bottom: 1px solid black;
+}

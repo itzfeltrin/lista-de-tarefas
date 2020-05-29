@@ -3,7 +3,7 @@ import "../App.css";
 
 export class AddTodo extends Component {
   render() {
-    const { title, onChange, onSubmit, editItem, idToEdit } = this.props;
+    const { title, onChange, onSubmit, editItem } = this.props;
     return (
       <form style={formStyle} onSubmit={onSubmit}>
         <input

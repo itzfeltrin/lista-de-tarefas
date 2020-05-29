@@ -4,10 +4,12 @@ import TodoList from "./components/TodoList";
 import Header from "./components/Header";
 import AddTodo from "./components/AddTodo";
 import ClearList from "./components/ClearList";
+import Navigator from "./components/Navigator";
 
 export class App extends Component {
   state = {
     todoList: [],
+    copyList: [],
     title: "",
     idToEdit: 0,
     editItem: false,
@@ -19,33 +21,45 @@ export class App extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.idToEdit);
     if (this.state.title.length > 0) {
       const newTodo = {
         title: this.state.title,
         completed: false,
-        id: this.state.idToEdit != "0" ? this.state.idToEdit : uuidv4(),
+        id: this.state.idToEdit !== 0 ? this.state.idToEdit : uuidv4(),
       };
-      this.setState({
-        todoList: [...this.state.todoList, newTodo],
-        title: "",
-      });
+      this.setState(
+        {
+          copyList: [...this.state.copyList, newTodo],
+          title: "",
+        },
+        () => this.setState({ todoList: Object.assign(this.state.copyList) })
+      );
     }
+    this.setState({
+      idToEdit: 0,
+      editItem: false,
+    });
   };
   /* marca tarefa como finalizada */
   markTodo = (id) => {
     const newList = this.state.todoList;
-    newList.map((todo) => {
+    newList.forEach((todo) => {
       if (todo.id === id) {
         todo.completed = !todo.completed;
       }
     });
-    this.setState({ todoList: newList });
+    this.setState(
+      {
+        copyList: newList,
+      },
+      () => this.setState({ todoList: Object.assign(this.state.copyList) })
+    );
   };
   /* deleta tarefa */
   deleteTodo = (id) => {
     this.setState({
       todoList: [...this.state.todoList.filter((todo) => todo.id !== id)],
+      copyList: [...this.state.copyList.filter((todo) => todo.id !== id)],
     });
   };
   /* editar tarefa */
@@ -62,7 +76,41 @@ export class App extends Component {
   /* limpa lista */
   clearList = () => {
     this.setState({
+      copyList: [],
       todoList: [],
+    });
+  };
+
+  /* filtra lista */
+  setFilter = (filtro) => {
+    this.setState(
+      {
+        todoList: Object.assign(this.state.copyList),
+      },
+      () => {
+        switch (filtro) {
+          case 1:
+            this.setState({
+              todoList: [
+                ...this.state.todoList.filter((todo) => todo.completed),
+              ],
+            });
+            break;
+          case 2:
+            this.setState({
+              todoList: [
+                ...this.state.todoList.filter((todo) => !todo.completed),
+              ],
+            });
+            break;
+        }
+      }
+    );
+  };
+
+  copyList = () => {
+    this.setState({
+      copyList: Object.assign(this.state.todoList),
     });
   };
 
@@ -70,13 +118,13 @@ export class App extends Component {
     return (
       <div>
         <Header />
+        <Navigator setFilter={this.setFilter} />
         <main style={containerStyle}>
           <AddTodo
             title={this.state.title}
             onChange={this.onChange}
             onSubmit={this.onSubmit}
             editItem={this.state.editItem}
-            idToEdit={this.state.idToEdit}
           />
           <TodoList
             markTodo={this.markTodo}
@@ -94,6 +142,7 @@ export class App extends Component {
 const containerStyle = {
   width: "60vw",
   margin: "25px auto",
+  maxHeight: "50vh",
 };
 
 export default App;
