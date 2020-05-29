@@ -1,10 +1,14 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+/* components */
 import TodoList from "./components/TodoList";
 import Header from "./components/Header";
 import AddTodo from "./components/AddTodo";
 import ClearList from "./components/ClearList";
 import Navigator from "./components/Navigator";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
 
 export class App extends Component {
   state = {
@@ -118,22 +122,50 @@ export class App extends Component {
     return (
       <div>
         <Header />
-        <Navigator setFilter={this.setFilter} />
-        <main style={containerStyle}>
-          <AddTodo
-            title={this.state.title}
-            onChange={this.onChange}
-            onSubmit={this.onSubmit}
-            editItem={this.state.editItem}
-          />
-          <TodoList
-            markTodo={this.markTodo}
-            editTodo={this.editTodo}
-            deleteTodo={this.deleteTodo}
-            todoList={this.state.todoList}
-          />
-          <ClearList clearList={this.clearList} />
-        </main>
+        <Router>
+          <Switch>
+            <Route
+              path="/"
+              exact={true}
+              render={(props) => (
+                <main style={containerStyle}>
+                  <Signup />
+                </main>
+              )}
+            />
+            <Route
+              path="/login"
+              render={(props) => (
+                <main style={containerStyle}>
+                  <Login />
+                </main>
+              )}
+            />
+            <Route
+              path="/home"
+              render={(props) => (
+                <React.Fragment>
+                  <Navigator setFilter={this.setFilter} />
+                  <main style={containerStyle}>
+                    <AddTodo
+                      title={this.state.title}
+                      onChange={this.onChange}
+                      onSubmit={this.onSubmit}
+                      editItem={this.state.editItem}
+                    />
+                    <TodoList
+                      markTodo={this.markTodo}
+                      editTodo={this.editTodo}
+                      deleteTodo={this.deleteTodo}
+                      todoList={this.state.todoList}
+                    />
+                    <ClearList clearList={this.clearList} />
+                  </main>
+                </React.Fragment>
+              )}
+            />
+          </Switch>
+        </Router>
       </div>
     );
   }
